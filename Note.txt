@@ -1,1 +1,19 @@
+Installation & Setup
+Prerequisites
+Python 3.10 or 3.12+
+Web Camera (built-in or USB external camera)
+1. Clone the Repository
+git clone https://github.com/shaha/drawines.git
+cd drawines/ddds
+2. Install Dependencies
+pip install -r requirements.txt
+Running the Dashboards
+Option A: Desktop Tkinter Dashboard
+To run the standard desktop dashboard window:
 
+python main.py
+Option B: Localhost Web Dashboard
+To host the Flask web dashboard on localhost:
+
+python web_app.py
+Open your browser and navigate to: http://localhost:5000
