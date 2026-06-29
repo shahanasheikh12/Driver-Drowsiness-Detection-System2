@@ -1,0 +1,14 @@
+ddds/
+├── assets/
+│   └── alert.wav               # Programmatically generated alarm audio (880Hz/660Hz two-tone)
+├── data/
+│   ├── .gitkeep                # Git keeping placeholder
+│   └── sessions.csv            # CSV file containing logged driver session metrics
+├── alert.py                    # Multi-level alert system (cooldown, voice fallbacks, alarm triggering)
+├── calibrator.py               # Adaptive calibration (gathers first 90 frames of open eyes to set baseline)
+├── detector.py                 # Core facial math (computes Eye Aspect Ratio [EAR], Mouth Aspect Ratio [MAR], blinks)
+├── logger.py                   # Session logging manager (accumulates and writes stats to CSV, prints console reports)
+├── main.py                     # Tkinter Desktop App & background detection thread runner
+├── ui.py                       # Tkinter-based dark dashboard UI layout and widget controller
+├── verify.py                   # Verification suite testing imports, calculations, and hardware camera FPS
+└── web_app.py                  # Flask Web App hosting localhost:5000 server with live MJPEG webcam stream

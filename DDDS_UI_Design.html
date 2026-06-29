@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDDS v2.0 — UI/UX Design</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-base: #07090F;
+    --bg-card: #0E1220;
+    --bg-card2: #141926;
+    --bg-panel: #1A2035;
+    --cyan: #00D4FF;
+    --cyan-dim: rgba(0,212,255,0.12);
+    --cyan-glow: rgba(0,212,255,0.25);
+    --green: #22C55E;
+    --green-dim: rgba(34,197,94,0.15);
+    --amber: #F59E0B;
+    --amber-dim: rgba(245,158,11,0.15);
+    --red: #EF4444;
+    --red-dim: rgba(239,68,68,0.15);
+    --text-primary: #F0F4FF;
+    --text-secondary: #7A8AAA;
+    --text-muted: #4A566E;
+    --border: rgba(255,255,255,0.07);
+    --border-cyan: rgba(0,212,255,0.25);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  /* ── TOP NAV ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 52px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-mark {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    background: var(--cyan);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width:16px; height:16px; }
+  .logo-text {
+    font-size: 15px; font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-primary);
+  }
+  .logo-text span { color: var(--cyan); }
+  .topbar-status {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .dot-live {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:0.5; transform:scale(0.85); }
+  }
+  .topbar-actions { display: flex; gap: 10px; align-items: center; }
+  .btn-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text-secondary);
+    transition: all 0.2s;
+  }
+  .btn-icon:hover { background: var(--bg-card2); color: var(--cyan); }
+
+  /* ── MAIN LAYOUT ── */
+  .app-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 300px;
+    height: calc(100vh - 52px);
+  }
+
+  /* ── LEFT SIDEBAR ── */
+  .sidebar {
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 14px 18px 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 18px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .nav-item:hover { background: var(--bg-card2); color: var(--text-primary); }
+  .nav-item.active {
+    background: var(--cyan-dim);
+    color: var(--cyan);
+    border-left-color: var(--cyan);
+  }
+  .nav-item svg { width:16px; height:16px; flex-shrink:0; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 99px;
+  }
+  .sidebar-bottom {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .driver-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg-card2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .driver-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, #1e3a8a, var(--cyan));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .driver-info p { font-size: 13px; font-weight: 500; }
+  .driver-info span { font-size: 11px; color: var(--text-secondary); }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    background: var(--bg-base);
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* CALIBRATION BANNER */
+  .banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--amber);
+  }
+  .banner-progress {
+    flex: 1;
+    height: 4px;
+    background: rgba(245,158,11,0.15);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .banner-progress-fill {
+    height: 100%;
+    width: 62%;
+    background: var(--amber);
+    border-radius: 99px;
+    animation: shimmer 1.5s linear infinite;
+  }
+  @keyframes shimmer {
+    0% { opacity:0.7; } 50% { opacity:1; } 100% { opacity:0.7; }
+  }
+
+  /* VIDEO + SCORE ROW */
+  .row-top {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+  }
+
+  /* VIDEO FEED */
+  .video-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+  .video-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .fps-badge {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--green);
+    background: var(--green-dim);
+    padding: 2px 8px;
+    border-radius: 5px;
+  }
+  .video-body {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  /* simulated face mesh feed */
+  .face-sim {
+    width: 200px; height: 240px;
+    position: relative;
+  }
+  .face-oval {
+    width: 180px; height: 230px;
+    border: 1.5px solid rgba(0,212,255,0.4);
+    border-radius: 50%;
+    position: absolute;
+    left: 10px; top: 0;
+  }
+  .landmark-dot {
+    width: 3px; height: 3px;
+    background: var(--cyan);
+    border-radius: 50%;
+    position: absolute;
+    opacity: 0.7;
+  }
+  .eye-box {
+    position: absolute;
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    padding: 2px;
+  }
+  .eye-label {
+    position: absolute;
+    font-size: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--green);
+    top: -14px;
+    left: 0;
+  }
+  .mesh-lines {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0.15;
+  }
+  /* scan line animation */
+  .scan-line {
+    position: absolute;
+    left: 0; right: 0; height: 2px;
+    background: linear-gradient(to right, transparent, var(--cyan), transparent);
+    animation: scan 3s linear infinite;
+    opacity: 0.5;
+  }
+  @keyframes scan {
+    0% { top: 0; } 100% { top: 100%; }
+  }
+  /* Status overlay bar */
+  .video-status-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 14px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .status-chip {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  .status-normal { background: var(--green-dim); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .status-drowsy { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .status-critical { background: var(--red-dim); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+  .video-metrics {
+    display: flex; gap: 12px;
+    color: var(--text-secondary);
+  }
+  .video-metrics span { color: var(--cyan); }
+
+  /* FATIGUE SCORE CARD */
+  .score-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .score-card-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .score-ring-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .score-ring {
+    position: relative;
+    width: 160px; height: 160px;
+  }
+  .score-ring svg {
+    width: 160px; height: 160px;
+    transform: rotate(-90deg);
+  }
+  .score-ring-track {
+    fill: none;
+    stroke: var(--bg-panel);
+    stroke-width: 10;
+  }
+  .score-ring-fill {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 408;
+    stroke-dashoffset: 200;
+    transition: all 0.5s ease;
+  }
+  .score-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-num {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--amber);
+  }
+  .score-unit { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .score-status {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 5px 18px;
+    border-radius: 99px;
+    background: var(--amber-dim);
+    color: var(--amber);
+    border: 1px solid rgba(245,158,11,0.3);
+  }
+
+  /* ALERT LEVEL DOTS */
+  .alert-levels {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  .level-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    flex: 1;
+    transition: all 0.2s;
+  }
+  .level-item.active-amber {
+    background: var(--amber-dim);
+    border-color: rgba(245,158,11,0.3);
+  }
+  .level-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .level-dot.green { background: var(--green); }
+  .level-dot.amber { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+  .level-dot.red { background: var(--red); }
+  .level-label { font-size: 9px; color: var(--text-muted); letter-spacing: 0.08em; }
+  .level-item.active-amber .level-label { color: var(--amber); }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .stat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .stat-icon {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+  }
+  .stat-sub { font-size: 11px; color: var(--text-secondary); }
+  .stat-trend {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-weight: 500;
+  }
+  .trend-up { background: var(--red-dim); color: var(--red); }
+  .trend-ok { background: var(--green-dim); color: var(--green); }
+
+  /* ── RIGHT PANEL ── */
+  .right-panel {
+    background: var(--bg-card);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .panel-section {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  /* Session controls */
+  .btn-primary {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--cyan);
+    color: #000;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .btn-primary:hover { background: #00b8e6; }
+  .btn-secondary {
+    width: 100%;
+    padding: 9px;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-secondary:hover { background: var(--bg-card2); color: var(--text-primary); }
+  .session-timer {
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .session-timer .time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: 0.05em;
+  }
+  .session-timer .time-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Alert Log */
+  .alert-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .alert-item:last-child { border-bottom: none; }
+  .alert-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .alert-dot.amber { background: var(--amber); }
+  .alert-dot.red { background: var(--red); box-shadow: 0 0 4px var(--red); }
+  .alert-text { font-size: 12px; color: var(--text-secondary); flex: 1; line-height: 1.4; }
+  .alert-text strong { color: var(--text-primary); display: block; font-size: 12px; }
+  .alert-time { font-size: 10px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* EAR/MAR gauges */
+  .gauge-row { display: flex; flex-direction: column; gap: 10px; }
+  .gauge-item { display: flex; flex-direction: column; gap: 5px; }
+  .gauge-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+  .gauge-label { color: var(--text-muted); }
+  .gauge-val { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+  .gauge-track {
+    height: 5px;
+    background: var(--bg-panel);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .gauge-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.3s ease;
+  }
+
+  /* Calibration mini widget */
+  .calib-block {
+    background: var(--bg-card2);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .calib-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+  .calib-key { color: var(--text-muted); }
+  .calib-val { font-family: 'JetBrains Mono', monospace; color: var(--cyan); }
+
+  /* Settings row */
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+  }
+  .setting-label { color: var(--text-secondary); }
+  .toggle {
+    width: 34px; height: 18px;
+    border-radius: 99px;
+    position: relative;
+    cursor: pointer;
+  }
+  .toggle.on { background: var(--cyan); }
+  .toggle.off { background: var(--bg-panel); }
+  .toggle-knob {
+    width: 14px; height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    transition: left 0.2s;
+  }
+  .toggle.on .toggle-knob { left: 18px; }
+  .toggle.off .toggle-knob { left: 2px; }
+
+  /* Scroll styling */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg-panel); border-radius: 2px; }
+
+  /* face simulation landmarks */
+  .lm { position: absolute; width: 2px; height: 2px; background: rgba(0,212,255,0.5); border-radius: 50%; }
+
+  /* SCREEN LABELS */
+  .screen-section-title {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="8" r="6" stroke="#000" stroke-width="1.5"/>
+        <circle cx="8" cy="8" r="2.5" fill="#000"/>
+        <line x1="8" y1="2" x2="8" y2="0" stroke="#000" stroke-width="1.5"/>
+        <line x1="14" y1="8" x2="16" y2="8" stroke="#000" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <span class="logo-text">DD<span>DS</span> <span style="color:var(--text-muted);font-weight:400;font-size:13px;">v2.0</span></span>
+  </div>
+  <div class="topbar-status">
+    <div class="dot-live"></div>
+    Live Monitoring
+    <span style="color:var(--border-cyan);margin:0 4px;">|</span>
+    Session: 00:23:41
+    <span style="color:var(--border-cyan);margin:0 4px;">|</span>
+    Driver: Ramesh K.
+  </div>
+  <div class="topbar-actions">
+    <div class="btn-icon" title="Settings">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </div>
+    <div class="btn-icon" title="Download log">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section-label">Monitor</div>
+    <div class="nav-item active">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Live Dashboard
+    </div>
+    <div class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Fatigue Trends
+    </div>
+    <div class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Alert History
+      <span class="nav-badge">3</span>
+    </div>
+
+    <div class="sidebar-section-label">Session</div>
+    <div class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Session Logs
+    </div>
+    <div class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Driver Profiles
+    </div>
+
+    <div class="sidebar-section-label">Config</div>
+    <div class="nav-item">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="driver-card">
+        <div class="driver-avatar">RK</div>
+        <div class="driver-info">
+          <p>Ramesh K.</p>
+          <span>Driver #04</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- CALIBRATION BANNER -->
+    <div class="banner">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span style="font-weight:600;">Calibrating</span>
+      <span style="color:rgba(245,158,11,0.7);">Learning your baseline EAR — keep eyes open normally</span>
+      <div class="banner-progress" style="max-width:140px;">
+        <div class="banner-progress-fill"></div>
+      </div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;">56 / 90</span>
+    </div>
+
+    <!-- VIDEO + SCORE -->
+    <div class="row-top">
+
+      <!-- VIDEO -->
+      <div class="video-card">
+        <div class="video-header">
+          <div class="video-header-left">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            Webcam Feed — MediaPipe FaceMesh
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="fps-badge">28 FPS</span>
+            <span class="status-chip status-drowsy">⚠ DROWSY</span>
+          </div>
+        </div>
+        <div class="video-body">
+          <!-- Simulated face mesh visualization -->
+          <div class="face-sim">
+            <div class="face-oval"></div>
+            <!-- landmark dots scatter -->
+            <div class="lm" style="left:60px;top:70px;"></div>
+            <div class="lm" style="left:80px;top:65px;"></div>
+            <div class="lm" style="left:100px;top:63px;"></div>
+            <div class="lm" style="left:120px;top:65px;"></div>
+            <div class="lm" style="left:140px;top:70px;"></div>
+            <div class="lm" style="left:55px;top:95px;"></div>
+            <div class="lm" style="left:145px;top:95px;"></div>
+            <div class="lm" style="left:90px;top:115px;"></div>
+            <div class="lm" style="left:100px;top:115px;"></div>
+            <div class="lm" style="left:110px;top:115px;"></div>
+            <div class="lm" style="left:70px;top:145px;"></div>
+            <div class="lm" style="left:90px;top:155px;"></div>
+            <div class="lm" style="left:100px;top:158px;"></div>
+            <div class="lm" style="left:110px;top:155px;"></div>
+            <div class="lm" style="left:130px;top:145px;"></div>
+            <div class="lm" style="left:75px;top:175px;"></div>
+            <div class="lm" style="left:100px;top:185px;"></div>
+            <div class="lm" style="left:125px;top:175px;"></div>
+            <!-- Left eye box -->
+            <div class="eye-box" style="left:50px;top:75px;width:42px;height:20px;">
+              <span class="eye-label">EAR: 0.18</span>
+            </div>
+            <!-- Right eye box -->
+            <div class="eye-box" style="right:32px;top:75px;width:42px;height:20px;">
+              <span class="eye-label">EAR: 0.19</span>
+            </div>
+          </div>
+          <div class="scan-line"></div>
+          <!-- Status bar -->
+          <div class="video-status-bar">
+            <div class="video-metrics">
+              EAR: <span>0.185</span> &nbsp; MAR: <span>0.28</span> &nbsp; Score: <span style="color:var(--amber)">52</span>
+            </div>
+            <div style="color:var(--text-muted);font-size:10px;">468 landmarks tracked</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FATIGUE SCORE -->
+      <div class="score-card">
+        <div class="score-card-title">Fatigue Score</div>
+        <div class="score-ring-wrap">
+          <div class="score-ring">
+            <svg viewBox="0 0 160 160">
+              <circle class="score-ring-track" cx="80" cy="80" r="65"/>
+              <circle class="score-ring-fill" cx="80" cy="80" r="65"
+                style="stroke:var(--amber); stroke-dashoffset:196;"/>
+            </svg>
+            <div class="score-center">
+              <div class="score-num">52</div>
+              <div class="score-unit">/ 100</div>
+            </div>
+          </div>
+          <div class="score-status">⚠ DROWSY</div>
+        </div>
+
+        <!-- Alert levels -->
+        <div class="alert-levels">
+          <div class="level-item">
+            <div class="level-dot green"></div>
+            <div class="level-label">NORMAL</div>
+          </div>
+          <div class="level-item active-amber">
+            <div class="level-dot amber"></div>
+            <div class="level-label">DROWSY</div>
+          </div>
+          <div class="level-item">
+            <div class="level-dot red"></div>
+            <div class="level-label">CRITICAL</div>
+          </div>
+        </div>
+
+        <!-- Breakdown bars -->
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:10px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Score Breakdown</div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span class="gauge-label">EAR (60%)</span>
+              <span class="gauge-val" style="color:var(--amber)">42</span>
+            </div>
+            <div class="gauge-track">
+              <div class="gauge-fill" style="width:42%;background:var(--amber);"></div>
+            </div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span class="gauge-label">MAR (25%)</span>
+              <span class="gauge-val" style="color:var(--green)">12</span>
+            </div>
+            <div class="gauge-track">
+              <div class="gauge-fill" style="width:12%;background:var(--green);"></div>
+            </div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span class="gauge-label">Blink Rate (15%)</span>
+              <span class="gauge-val" style="color:var(--amber)">38</span>
+            </div>
+            <div class="gauge-track">
+              <div class="gauge-fill" style="width:38%;background:var(--amber);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <span class="stat-label">EAR Value</span>
+          <div class="stat-icon" style="background:var(--cyan-dim);">👁️</div>
+        </div>
+        <div class="stat-value" style="color:var(--amber)">0.185</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="stat-sub">Threshold: 0.203</span>
+          <span class="stat-trend trend-up">Below baseline</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <span class="stat-label">Blink Rate</span>
+          <div class="stat-icon" style="background:var(--green-dim);">✨</div>
+        </div>
+        <div class="stat-value" style="color:var(--green)">14</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="stat-sub">per minute</span>
+          <span class="stat-trend trend-ok">Normal</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <span class="stat-label">Alerts Fired</span>
+          <div class="stat-icon" style="background:var(--red-dim);">🔔</div>
+        </div>
+        <div class="stat-value" style="color:var(--red)">3</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="stat-sub">this session</span>
+          <span class="stat-trend trend-up">↑ 2 amber</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-header">
+          <span class="stat-label">Session Time</span>
+          <div class="stat-icon" style="background:rgba(139,92,246,0.15);">⏱️</div>
+        </div>
+        <div class="stat-value" style="color:var(--text-primary);font-size:20px;">23:41</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="stat-sub">Started 10:14 AM</span>
+          <span class="stat-trend trend-ok">Active</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <aside class="right-panel">
+
+    <!-- SESSION CONTROLS -->
+    <div class="panel-section">
+      <div class="panel-section-title">Session Control</div>
+      <div class="session-timer">
+        <div class="time">23:41</div>
+        <div class="time-label">Session duration</div>
+      </div>
+      <button class="btn-primary">
+        <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        Stop Session
+      </button>
+      <button class="btn-secondary">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Recalibrate
+      </button>
+      <button class="btn-secondary" style="margin-top:6px;">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Save Log CSV
+      </button>
+    </div>
+
+    <!-- EAR / MAR GAUGES -->
+    <div class="panel-section">
+      <div class="panel-section-title">Sensor Readings</div>
+      <div class="gauge-row">
+        <div class="gauge-item">
+          <div class="gauge-header">
+            <span class="gauge-label">EAR — Eye Aspect Ratio</span>
+            <span class="gauge-val" style="color:var(--amber)">0.185</span>
+          </div>
+          <div class="gauge-track">
+            <div class="gauge-fill" style="width:61%;background:var(--amber);"></div>
+          </div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-header">
+            <span class="gauge-label">MAR — Mouth Aspect Ratio</span>
+            <span class="gauge-val" style="color:var(--green)">0.28</span>
+          </div>
+          <div class="gauge-track">
+            <div class="gauge-fill" style="width:28%;background:var(--green);"></div>
+          </div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-header">
+            <span class="gauge-label">PERCLOS (30s window)</span>
+            <span class="gauge-val" style="color:var(--amber)">0.22</span>
+          </div>
+          <div class="gauge-track">
+            <div class="gauge-fill" style="width:22%;background:var(--amber);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALIBRATION DATA -->
+    <div class="panel-section">
+      <div class="panel-section-title">Calibration Data</div>
+      <div class="calib-block">
+        <div class="calib-row">
+          <span class="calib-key">Baseline EAR</span>
+          <span class="calib-val">0.271</span>
+        </div>
+        <div class="calib-row">
+          <span class="calib-key">Alert Threshold</span>
+          <span class="calib-val">0.203</span>
+        </div>
+        <div class="calib-row">
+          <span class="calib-key">Status</span>
+          <span style="font-size:12px;color:var(--amber);">In progress</span>
+        </div>
+        <div class="calib-row">
+          <span class="calib-key">Frames collected</span>
+          <span class="calib-val">56 / 90</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERT LOG -->
+    <div class="panel-section">
+      <div class="panel-section-title">Recent Alerts</div>
+      <div class="alert-item">
+        <div class="alert-dot amber"></div>
+        <div class="alert-text">
+          <strong>Drowsiness Detected</strong>
+          Score reached 52 — EAR below threshold
+        </div>
+        <div class="alert-time">10:37</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot red"></div>
+        <div class="alert-text">
+          <strong>Critical Alert</strong>
+          Eyes closed for 2.8s — alarm triggered
+        </div>
+        <div class="alert-time">10:31</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot amber"></div>
+        <div class="alert-text">
+          <strong>Drowsiness Detected</strong>
+          Low blink rate: 7/min for 60s
+        </div>
+        <div class="alert-time">10:24</div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TOGGLES -->
+    <div class="panel-section">
+      <div class="panel-section-title">Quick Settings</div>
+      <div class="setting-row">
+        <span class="setting-label">Voice alerts (Hindi)</span>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Night mode enhance</span>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Sound alarm</span>
+        <div class="toggle on"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">SMS alert</span>
+        <div class="toggle off"><div class="toggle-knob"></div></div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+</body>
+</html>
